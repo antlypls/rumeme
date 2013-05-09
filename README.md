@@ -1,6 +1,9 @@
 RuMeMe
 ======
 
+[![Build Status](https://travis-ci.org/antlypls/rumeme.png?branch=master)](https://travis-ci.org/antlypls/rumeme)
+[![Code Climate](https://codeclimate.com/github/antlypls/rumeme.png)](https://codeclimate.com/github/antlypls/rumeme)
+
 Ruby SDK for Message Media SMS Gateway API.
 Since Message Media doesn't provide any ruby projects support, we decided to port it from available SDKs (mainly from PHP SDK; and some .NET usage).
 For more information checkout [Message Media SMS APIs](http://www.message-media.com/sms-gateway.html).
@@ -47,12 +50,6 @@ si.send_messages
 ```
 
 Where xxxxxxxxxxx is phone number.
-
-To Do
-=====
-
-* Refactoring to make api more rubyish,
-* Add unit tests,
 
 Credits
 =======
