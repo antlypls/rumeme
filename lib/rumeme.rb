@@ -1,3 +1,5 @@
+require "rumeme/extensions"
+require "rumeme/utils"
 require "rumeme/configuration"
 require "rumeme/message_status"
 require "rumeme/validity_period"

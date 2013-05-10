@@ -29,7 +29,7 @@ Rumeme.configure do |config|
   config.password = 'yyy'
   config.use_message_id = true
   config.secure = true
- config.allow_splitting = false
+  config.allow_splitting = false
   config.allow_long_messages = true
 end
 ```

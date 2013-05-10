@@ -10,7 +10,7 @@ module Rumeme
     LONG_MESSAGES_PROCESSORS = {
      send: ->(message) { [message] },
      cut:  ->(message) { [message[0..159]] },
-     split: ->(message) { SmsInterface.split_message message }
+     split: ->(message) { Utils.split_message(message) }
     }
 
     # allow_splitting, allow_long_messages, response_code, response_message, username, password, use_message_id, secure, http_connection, server_list, message_list,
@@ -44,11 +44,10 @@ module Rumeme
 
     # Add a message to be sent.
     def add_message(args)
-      phone_number = self.class.strip_invalid(args[:phone_number]) #not good idea, modifying original args, from outer scope (antlypls)
+      phone_number = Utils.strip_invalid(args[:phone_number])
       message = args[:message]
 
-      raise ArgumentError.new("phone_number is empty") if phone_number.nil? || phone_number.empty?
-      raise ArgumentError.new("message is empty") if message.nil? || message.empty?
+      check_message_args(args)
 
       messages = process_long_message(message)
       @message_list.concat(messages.map{|msg| SmsMessage.new(args.merge({:message => msg, :phone_number => phone_number}))})
@@ -121,37 +120,9 @@ module Rumeme
 
     private
 
-    class << self
-      def head_tail_split message, max_len
-        return [message, nil] if message.length < max_len
-        pattern = /\s\.,!;:-\)/
-        index = message[0..max_len].rindex(pattern) || max_len
-        [message[0..index], message[index+1 .. -1]]
-      end
-
-      def split_message_internal message
-        list = []
-        sizes = Enumerator.new {|yielder| yielder << 152; yielder << 155 while true}
-
-        until message.nil? do
-          head, message = head_tail_split(message, sizes.next)
-          list << head
-        end
-
-        list
-      end
-
-      def split_message message
-        messages = split_message_internal message
-        message_index = 1
-        total_messages = messages.size
-        ["#{messages[0]}...(1/#{total_messages})"].concat(messages[1..-1].map {|msg| "(#{message_index+=1}/#{total_messages})#{msg}"})
-      end
-
-      # Strip invalid characters from the phone number.
-      def strip_invalid phone
-        "+#{phone.gsub(/[^0-9]/, '')}" if phone
-      end
+    def check_message_args(args)
+      raise ArgumentError.new("phone_number is empty") if args[:phone_number].blank?
+      raise ArgumentError.new("message is empty") if args[:message].blank?
     end
 
     def process_long_message message
