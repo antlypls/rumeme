@@ -13,17 +13,6 @@ module Rumeme
      split: ->(message) { Utils.split_message(message) }
     }
 
-    # allow_splitting, allow_long_messages, response_code, response_message, username, password, use_message_id, secure, http_connection, server_list, message_list,
-    # http_proxy, http_proxy_port, http_proxy_auth, https_proxy, https_proxy_port, https_proxy_auth, text_buffer,
-
-    # Constructor.
-    #
-    # The allowSplitting parameter determines whether messages over
-    # 160 characters will be split over multiple SMSes or truncated.
-    #
-    # The allowLongMessages parameter enables messages longer than 160
-    # characters to be sent as special concatenated messages. For this
-    # to take effect, the allowSplitting parameter must be set to false.
     def initialize
       Rumeme.configuration.tap do |cfg|
         @username = cfg.username
@@ -44,12 +33,11 @@ module Rumeme
 
     # Add a message to be sent.
     def add_message(args)
-      phone_number = Utils.strip_invalid(args[:phone_number])
-      message = args[:message]
-
       check_message_args(args)
 
-      messages = process_long_message(message)
+      phone_number = Utils.strip_invalid(args[:phone_number])
+      messages = process_long_message(args[:message])
+
       @message_list.concat(messages.map{|msg| SmsMessage.new(args.merge({:message => msg, :phone_number => phone_number}))})
     end
 
