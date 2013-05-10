@@ -7,6 +7,12 @@ module Rumeme
   class SmsInterface
     class BadServerResponse < StandardError; end
 
+    LONG_MESSAGES_PROCESSORS = {
+     send: ->(message) { [message] },
+     cut:  ->(message) { [message[0..159]] },
+     split: ->(message) { SmsInterface.split_message message }
+    }
+
     # allow_splitting, allow_long_messages, response_code, response_message, username, password, use_message_id, secure, http_connection, server_list, message_list,
     # http_proxy, http_proxy_port, http_proxy_auth, https_proxy, https_proxy_port, https_proxy_auth, text_buffer,
 
@@ -19,33 +25,25 @@ module Rumeme
     # characters to be sent as special concatenated messages. For this
     # to take effect, the allowSplitting parameter must be set to false.
     def initialize
-      Rumeme.configuration.tap{ |cfg|
+      Rumeme.configuration.tap do |cfg|
         @username = cfg.username
         @password = cfg.password
         @use_message_id = cfg.use_message_id
         @secure = cfg.secure
 
-        @long_messages_processor = case cfg.long_messages_strategy
-          when :send
-            lambda {|message| [message]}
-          when :cut
-            lambda {|message| [message[0..159]]}
-          when :split
-            lambda {|message| SmsInterface.split_message message}
-          else
-            lambda {|message| raise ArgumentError.new("invalid long_messages_strategy")}
+        @long_messages_processor = LONG_MESSAGES_PROCESSORS.fetch(cfg.long_messages_strategy) do
+          raise ArgumentError.new("invalid long_messages_strategy")
         end
 
         @replies_auto_confirm = cfg.replies_auto_confirm
-      }
+      end
 
       @message_list = []
       @server_list = %W(smsmaster.m4u.com.au smsmaster1.m4u.com.au smsmaster2.m4u.com.au)
-
     end
 
     # Add a message to be sent.
-    def add_message args
+    def add_message(args)
       phone_number = self.class.strip_invalid(args[:phone_number]) #not good idea, modifying original args, from outer scope (antlypls)
       message = args[:message]
 
@@ -61,7 +59,7 @@ module Rumeme
       @message_list.clear
     end
 
-    def open_server_connection server
+    def open_server_connection(server)
       port, use_ssl = @secure ? [443, true] : [80, false]
 
       http_connection = Net::HTTP.new(server, port)
