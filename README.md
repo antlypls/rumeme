@@ -1,8 +1,8 @@
 RuMeMe
 ======
 
-[![Build Status](https://travis-ci.org/rumeme/rumeme.png?branch=master)](https://travis-ci.org/antlypls/rumeme)
-[![Code Climate](https://codeclimate.com/github/rumeme/rumeme.png)](https://codeclimate.com/github/antlypls/rumeme)
+[![Build Status](https://travis-ci.org/rumeme/rumeme.png?branch=master)](https://travis-ci.org/rumeme/rumeme)
+[![Code Climate](https://codeclimate.com/github/rumeme/rumeme.png)](https://codeclimate.com/github/rumeme/rumeme)
 
 Ruby SDK for Message Media SMS Gateway API.
 Since Message Media doesn't provide any ruby projects support, we decided to port it from available SDKs (mainly from PHP SDK; and some .NET usage).
