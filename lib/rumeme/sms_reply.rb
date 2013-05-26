@@ -4,13 +4,13 @@ module Rumeme
     attr_reader :phone_number, :message, :message_id, :when, :status
 
     #Constructor.
-    def initialize phone_number, message, message_id, _when, status
+    def initialize(phone_number, message, message_id, _when, status)
       @phone_number, @message, @message_id, @when, @status = phone_number, message, message_id, _when, status
     end
 
     class << self
       # Unescape any escaped characters in the string.
-      def unescape line
+      def unescape(line)
         line.gsub('\n', "\n").gsub('\r', "\r").gsub('\\\\', "\\") if line
       end
 
@@ -19,9 +19,7 @@ module Rumeme
       # Or if no message ID: phone when message /(\d+)\s(\d+)\s(.+)/
       # Or if delivery receipt: messageID messageStatus when /(\d+)\s(\d)\s(\d+)/
       # current implementation ignores use_message_id setting (as original code)
-      def parse line
-        # p "parsing line: #{line}"
-
+      def parse(line)
         message_id, status, message, phone, when_ = case line
           when /^(\d+)\s(\d)\s(\d+)/
             #process delivery report

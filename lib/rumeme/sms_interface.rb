@@ -113,7 +113,7 @@ module Rumeme
       raise ArgumentError.new("message is empty") if args[:message].blank?
     end
 
-    def process_long_message message
+    def process_long_message(message)
       return [message] if message.length <= 160
       @long_messages_processor.call(message)
     end
@@ -126,7 +126,7 @@ module Rumeme
       "m4u\r\nUSER=#{@username}#{message_id_sign}\r\nPASSWORD=#{@password}\r\nVER=PHP1.0\r\n"
     end
 
-    def post_data_to_server data
+    def post_data_to_server(data)
       http_connection = open_server_connection(@server_list[0])
       text_buffer = create_login_string + data
 
