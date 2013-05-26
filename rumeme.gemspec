@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Anatoliy Plastinin, Cloud Castle LLC", "Stan Carver II, A1 Web Consulting"]
   s.email       = ["antlypls@gmail.com", "stan@a1webconsulting.com"]
 
-  s.homepage = "http://github.com/programmable/rumeme"
+  s.homepage = "http://github.com/rumeme/rumeme"
   s.summary = "Ruby SDK for Message Media SMS Gateway API"
   s.description = "Ruby SDK for Message Media SMS Gateway API"
 
