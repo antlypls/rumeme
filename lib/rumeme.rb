@@ -6,6 +6,7 @@ require "rumeme/validity_period"
 require "rumeme/sms_message"
 require "rumeme/sms_reply"
 require "rumeme/sms_interface"
+require "rumeme/version"
 
 module Rumeme
   class << self

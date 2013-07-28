@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.summary = "Ruby SDK for Message Media SMS Gateway API"
   s.description = "Ruby SDK for Message Media SMS Gateway API"
 
-  s.add_development_dependency 'shoulda'
   s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

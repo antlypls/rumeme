@@ -1,17 +1,11 @@
-require 'rake'
-require 'rake/testtask'
 require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
 
 require 'date'
 
-desc 'Test the rumeme gem'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
+RSpec::Core::RakeTask.new(:spec)
 
-task :default => [:test]
+task :default => :spec
 
 desc "Bumps the version by a minor or patch version, depending on what was passed in."
 task :bump, :part do |t, args|
