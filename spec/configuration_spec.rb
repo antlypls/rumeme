@@ -1,5 +1,7 @@
-describe 'Configuration' do
-  before(:each) do
+require 'spec_helper'
+
+describe Rumeme::Configuration do
+  before(:all) do
     @rumeme_configuration = Rumeme::Configuration.new
   end
 

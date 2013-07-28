@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe 'SmsReply' do
+describe Rumeme::SmsReply do
 
   context ".parse for reply with id" do
-    before(:each) do
+    before(:all) do
       @sms_reply = Rumeme::SmsReply.parse("12 79270123456 100 asdfgh")
     end
 
@@ -29,7 +29,7 @@ describe 'SmsReply' do
   end
 
   context ".parse for reply with id, phone with +" do
-    before(:each) do
+    before(:all) do
       @sms_reply = Rumeme::SmsReply.parse("39 +79270123456 35 105")
     end
 
@@ -55,7 +55,7 @@ describe 'SmsReply' do
   end
 
   context ".parse for reply without id" do
-    before(:each) do
+    before(:all) do
       @sms_reply = Rumeme::SmsReply.parse("79270123456 100 asdfgh")
     end
 
@@ -82,7 +82,7 @@ describe 'SmsReply' do
 
 
   context ".parse for delivery report: pending" do
-    before(:each) do
+    before(:all) do
       @sms_reply = Rumeme::SmsReply.parse("12 1 100")
     end
 

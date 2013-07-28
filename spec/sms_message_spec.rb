@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'SmsMessage' do
+describe Rumeme::SmsMessage do
   context 'constructor' do
     it 'correctly assigns all parameters' do
       sms = Rumeme::SmsMessage.new :phone_number => "12345678901",
