@@ -54,7 +54,8 @@ Where xxxxxxxxxxx is phone number.
 Credits
 =======
 
-RuMeMe is maintained by Anatoliy Plastinin, and is funded by [Cloud Castle, LLC](http://cloudcastlegroup.com/).
+RuMeMe is maintained by Anatoliy Plastinin,
+and is funded by [Cloud Castle, LLC](http://cloudcastlegroup.com/).
 
 Contributors
 ============
@@ -65,4 +66,5 @@ Contributors
 License
 =======
 
-Still looking for license. But the software is provided "as is", without warranty of any kind.
+RuMeMe is free software, and may be redistributed under the terms
+specified in the MIT-LICENSE file.
