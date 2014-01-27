@@ -29,8 +29,7 @@ Rumeme.configure do |config|
   config.password = 'yyy'
   config.use_message_id = true
   config.secure = true
-  config.allow_splitting = false
-  config.allow_long_messages = true
+  config.long_messages_strategy = :split
 end
 ```
 
@@ -68,3 +67,8 @@ License
 
 RuMeMe is free software, and may be redistributed under the terms
 specified in the MIT-LICENSE file.
+
+ToDo
+====
+
+What if no messages added and then call send?
