@@ -3,7 +3,7 @@ module Rumeme
   class SmsReply
     attr_reader :phone_number, :message, :message_id, :when, :status
 
-    #Constructor.
+    # Constructor.
     def initialize(phone_number, message, message_id, _when, status)
       @phone_number, @message, @message_id, @when, @status = phone_number, message, message_id, _when, status
     end
@@ -11,7 +11,7 @@ module Rumeme
     class << self
       # Unescape any escaped characters in the string.
       def unescape(line)
-        line.gsub('\n', "\n").gsub('\r', "\r").gsub('\\\\', "\\") if line
+        line.gsub('\n', "\n").gsub('\r', "\r").gsub('\\\\', '\\') if line
       end
 
       # Parse a reply from a string.
@@ -22,19 +22,19 @@ module Rumeme
       def parse(line)
         message_id, status, message, phone, when_ = case line
           when /^(\d+)\s(\d)\s(\d+)/
-            #process delivery report
+            # process delivery report
             [$1.to_i, $2.to_i, nil, nil, $3.to_i]
           when /^(\d+)\s\+?(\d+)\s(\d+)\s(.+)/
-            #process message with id
+            # process message with id
             [$1.to_i, MessageStatus::NONE, unescape($4), $2, $3.to_i]
           when /^\+?(\d+)\s(\d+)\s(.+)/
-            #process message without id
+            # process message without id
             [nil, MessageStatus::NONE, unescape($3), $1, $2.to_i]
           else
-            raise ArgumentError.new("can't parse line: #{line}")
+            fail ArgumentError, "can't parse line: #{line}"
         end
 
-        return SmsReply.new(phone, message, message_id, when_, status)
+        SmsReply.new(phone, message, message_id, when_, status)
       end
     end
 

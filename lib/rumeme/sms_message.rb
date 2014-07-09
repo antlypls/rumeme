@@ -5,22 +5,22 @@ module Rumeme
 
     # this defaults must be moved to global configuration
     DEFAULTS = {
-      :phone_number => nil,
-      :message => nil,
-      :message_id => 0,
-      :delay => 0,
-      :validity_period => ValidityPeriod::THREE_DAYS,
-      :delivery_report => false
+      phone_number: nil,
+      message: nil,
+      message_id: 0,
+      delay: 0,
+      validity_period: ValidityPeriod::THREE_DAYS,
+      delivery_report: false
     }.freeze
 
     # Constructor.
     def initialize(args)
       params = DEFAULTS.merge(args)
-      DEFAULTS.keys.each {|key| instance_variable_set(:"@#{key}", params[key])}
+      DEFAULTS.keys.each { |key| instance_variable_set(:"@#{key}", params[key]) }
 
       check_attributes
 
-      @message = @message.gsub("\n",'\n').gsub("\r",'\r').gsub("\\",'\\\\')
+      @message = @message.gsub("\n", '\n').gsub("\r", '\r').gsub('\\', '\\\\')
     end
 
     def post_string
@@ -30,8 +30,8 @@ module Rumeme
     private
 
     def check_attributes
-      raise ArgumentError.new("phone_number is empty") if @phone_number.blank?
-      raise ArgumentError.new("message is empty") if @message.blank?
+      fail ArgumentError, 'phone_number is empty' if @phone_number.blank?
+      fail ArgumentError, 'message is empty' if @message.blank?
     end
   end
 end

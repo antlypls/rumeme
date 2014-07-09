@@ -1,16 +1,15 @@
-require "net/http"
-require "net/https"
+require 'net/http'
+require 'net/https'
 
 module Rumeme
-
   # This is the main class used to interface with the M4U SMS messaging server.
   class SmsInterface
     class BadServerResponse < StandardError; end
 
     LONG_MESSAGES_PROCESSORS = {
-     send: ->(message) { [message] },
-     cut:  ->(message) { [message[0..159]] },
-     split: ->(message) { Utils.split_message(message) }
+      send: ->(message) { [message] },
+      cut:  ->(message) { [message[0..159]] },
+      split: ->(message) { Utils.split_message(message) }
     }
 
     def initialize
@@ -21,14 +20,14 @@ module Rumeme
         @secure = cfg.secure
 
         @long_messages_processor = LONG_MESSAGES_PROCESSORS.fetch(cfg.long_messages_strategy) do
-          raise ArgumentError.new("invalid long_messages_strategy")
+          fail ArgumentError, 'invalid long_messages_strategy'
         end
 
         @replies_auto_confirm = cfg.replies_auto_confirm
       end
 
       @message_list = []
-      @server_list = %W(smsmaster.m4u.com.au smsmaster1.m4u.com.au smsmaster2.m4u.com.au)
+      @server_list = %w(smsmaster.m4u.com.au smsmaster1.m4u.com.au smsmaster2.m4u.com.au)
     end
 
     # Add a message to be sent.
@@ -38,7 +37,7 @@ module Rumeme
       phone_number = Utils.strip_invalid(args[:phone_number])
       messages = process_long_message(args[:message])
 
-      @message_list.concat(messages.map{|msg| SmsMessage.new(args.merge({:message => msg, :phone_number => phone_number}))})
+      @message_list.concat(messages.map { |msg| SmsMessage.new(args.merge(message: msg, phone_number: phone_number)) })
     end
 
     # Clear all the messages from the list.
@@ -58,7 +57,7 @@ module Rumeme
     # Change the password on the local machine and server.
     # not implemented
     def change_password
-      raise 'Not Implemented'
+      fail 'Not Implemented'
     end
 
     # Return the list of replies we have received.
@@ -66,7 +65,7 @@ module Rumeme
       response_message, response_code = post_data_to_server("CHECKREPLY2.0\r\n.\r\n")
       return unless response_code == 150
 
-      messages = response_message.split("\r\n")[1..-2].map{|message_line| SmsReply.parse(message_line)} # check @use_message_id
+      messages = response_message.split("\r\n")[1..-2].map { |message_line| SmsReply.parse(message_line) } # check @use_message_id
       confirm_replies_received if @replies_auto_confirm && messages.size > 0
 
       messages
@@ -83,11 +82,11 @@ module Rumeme
 
       if response_message =~ /^(\d+)\s+OK\s+(\d+).+/
         if response_code != 100
-          raise BadServerResponse.new 'M4U code is not 100'
+          fail BadServerResponse, 'M4U code is not 100'
         end
         $2.to_i
       else
-        raise BadServerResponse.new "cant parse response: #{response_message}"
+        fail BadServerResponse, "cant parse response: #{response_message}"
       end
     end
 
@@ -103,14 +102,14 @@ module Rumeme
     # Sends all the messages that have been added with the add_message command.
     # Raises exception if not successful
     def send_messages!
-      raise BadServerResponse.new('error during sending messages') unless send_messages
+      fail BadServerResponse, 'error during sending messages' unless send_messages
     end
 
     private
 
     def check_message_args(args)
-      raise ArgumentError.new("phone_number is empty") if args[:phone_number].blank?
-      raise ArgumentError.new("message is empty") if args[:message].blank?
+      fail ArgumentError, 'phone_number is empty' if args[:phone_number].blank?
+      fail ArgumentError, 'message is empty' if args[:message].blank?
     end
 
     def process_long_message(message)
@@ -130,22 +129,22 @@ module Rumeme
       http_connection = open_server_connection(@server_list[0])
       text_buffer = create_login_string + data
 
-      headers = {'Content-Length' => text_buffer.length.to_s}
+      headers = { 'Content-Length' => text_buffer.length.to_s }
 
       path = '/'
 
       resp = http_connection.post(path, text_buffer, headers)
       data = resp.body
 
-      raise BadServerResponse.new('http response code != 200') unless resp.code.to_i == 200
+      fail BadServerResponse, 'http response code != 200' unless resp.code.to_i == 200
 
-      if data =~ /^.+<TITLE>(.+)<\/TITLE>.+<BODY>(.+)<\/BODY>.+/m
+      if data =~ %r{^.+<TITLE>(.+)</TITLE>.+<BODY>(.+)</BODY>.+}m
         parsed_title, parsed_body = $1, $2
       else
-        raise BadServerResponse.new('not html')
+        fail BadServerResponse, 'not html'
       end
 
-      raise BadServerResponse.new('bad title') unless parsed_title == "M4U SMSMASTER"
+      fail BadServerResponse, 'bad title' unless parsed_title == 'M4U SMSMASTER'
 
       response_message = parsed_body.strip
 

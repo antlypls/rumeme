@@ -5,9 +5,9 @@ require 'date'
 
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => :spec
+task default: :spec
 
-desc "Bumps the version by a minor or patch version, depending on what was passed in."
+desc 'Bumps the version by a minor or patch version, depending on what was passed in.'
 task :bump, :part do |t, args|
   if Rumeme::VERSION =~ /^(\d+)\.(\d+)\.(\d+)(?:\.(.*?))?$/
     major = $1.to_i
@@ -30,7 +30,7 @@ task :bump, :part do |t, args|
 
   version = [major, minor, patch].compact.join('.')
 
-  File.open(File.join("lib", "rumeme", "version.rb"), "w") do |f|
+  File.open(File.join('lib', 'rumeme', 'version.rb'), 'w') do |f|
     f.write <<EOF
 module Rumeme
   VERSION = "#{version}"
@@ -39,15 +39,15 @@ EOF
   end
 end
 
-desc "Writes out the new CHANGELOG and prepares the release"
+desc 'Writes out the new CHANGELOG and prepares the release'
 task :change do
   load 'lib/rumeme/version.rb'
-  file    = "CHANGELOG"
+  file    = 'CHANGELOG'
   old     = File.read(file)
   version = Rumeme::VERSION
   message = "Bumping to version #{version}"
 
-  File.open(file, "w") do |f|
+  File.open(file, 'w') do |f|
     f.write <<EOF
 Version #{version} - #{Date.today}
 ===============================================================================
@@ -57,35 +57,37 @@ Version #{version} - #{Date.today}
 EOF
   end
 
-  editor = ENV["EDITOR"] || 'vim'
+  editor = ENV['EDITOR'] || 'vim'
 
-  system ["#{editor} #{file}",
-        "git commit -aqm '#{message}'",
-        "git tag -a -m '#{message}' v#{version}",
-        "echo '\n\n\033[32mMarked v#{version} /' `git show-ref -s refs/heads/master` 'for release.\033[0m\n\n'"].join(' && ')
+  system [
+    "#{editor} #{file}",
+    "git commit -aqm '#{message}'",
+    "git tag -a -m '#{message}' v#{version}",
+    "echo '\n\n\033[32mMarked v#{version} /' `git show-ref -s refs/heads/master` 'for release.\033[0m\n\n'"
+  ].join(' && ')
 end
 
-desc "Bump by a minor version (1.2.3 => 1.3.0)"
+desc 'Bump by a minor version (1.2.3 => 1.3.0)'
 task :minor do |t|
   Rake::Task['bump'].invoke(t.name)
   Rake::Task['change'].invoke
 end
 
-desc "Bump by a patch version, (1.2.3 => 1.2.4)"
+desc 'Bump by a patch version, (1.2.3 => 1.2.4)'
 task :patch do |t|
   Rake::Task['bump'].invoke(t.name)
   Rake::Task['change'].invoke
 end
 
-desc "Push the latest version and tags"
+desc 'Push the latest version and tags'
 task :push do
-  system("git push origin master")
-  system("git push origin $(git tag | tail -1)")
+  system('git push origin master')
+  system('git push origin $(git tag | tail -1)')
 end
 
-#desc 'Preparing release'
-#task :prepare_release, :part do |t, args|
-#  Rake::Task['bump'].invoke(args[:part])
-#  Rake::Task['change'].invoke
-#  Rake::Task['push'].invoke
-#end
+# desc 'Preparing release'
+# task :prepare_release, :part do |t, args|
+#   Rake::Task['bump'].invoke(args[:part])
+#   Rake::Task['change'].invoke
+#   Rake::Task['push'].invoke
+# end

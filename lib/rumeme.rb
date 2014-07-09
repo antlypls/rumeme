@@ -1,12 +1,12 @@
-require "rumeme/extensions"
-require "rumeme/utils"
-require "rumeme/configuration"
-require "rumeme/message_status"
-require "rumeme/validity_period"
-require "rumeme/sms_message"
-require "rumeme/sms_reply"
-require "rumeme/sms_interface"
-require "rumeme/version"
+require 'rumeme/extensions'
+require 'rumeme/utils'
+require 'rumeme/configuration'
+require 'rumeme/message_status'
+require 'rumeme/validity_period'
+require 'rumeme/sms_message'
+require 'rumeme/sms_reply'
+require 'rumeme/sms_interface'
+require 'rumeme/version'
 
 module Rumeme
   class << self
@@ -16,7 +16,7 @@ module Rumeme
       @configuration ||= Configuration.new
       yield @configuration
 
-      raise 'unknown long_messages_strategy' unless [:split, :send, :cut].include?(@configuration.long_messages_strategy)
+      fail 'unknown long_messages_strategy' unless [:split, :send, :cut].include?(@configuration.long_messages_strategy)
     end
   end
 end

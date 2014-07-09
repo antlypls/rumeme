@@ -5,7 +5,7 @@ module Rumeme
         messages = split_message_internal(message)
         message_index = 1
         total_messages = messages.size
-        ["#{messages[0]}...(1/#{total_messages})"].concat(messages[1..-1].map {|msg| "(#{message_index+=1}/#{total_messages})#{msg}"})
+        ["#{messages[0]}...(1/#{total_messages})"].concat(messages[1..-1].map { |msg| "(#{message_index += 1}/#{total_messages})#{msg}" })
       end
 
       # Strip invalid characters from the phone number.
@@ -19,14 +19,17 @@ module Rumeme
         return [message, nil] if message.length < max_len
         pattern = /\s\.,!;:-\)/
         index = message[0..max_len].rindex(pattern) || max_len
-        [message[0..index], message[index+1 .. -1]]
+        [message[0..index], message[index + 1 .. -1]]
       end
 
       def split_message_internal(message)
         list = []
-        sizes = Enumerator.new {|yielder| yielder << 152; yielder << 155 while true}
+        sizes = Enumerator.new do |yielder|
+          yielder << 152
+          yielder << 155 while true
+        end
 
-        until message.nil? do
+        until message.nil?
           head, message = head_tail_split(message, sizes.next)
           list << head
         end

@@ -16,19 +16,19 @@ describe 'Utils' do
   context '.split_message' do
     it 'splits short messages' do
       message = 'small message'
-      result =Rumeme::Utils.split_message(message)
+      result = Rumeme::Utils.split_message(message)
 
       expect(result).to have(1).item
       expect(result.first).to eq('small message...(1/1)')
     end
 
     it 'splits long messages' do
-      message = 'a'*300
+      message = 'a' * 300
       result = Rumeme::Utils.split_message(message)
 
       expect(result).to have(2).items
-      expect(result.first).to eq("#{'a'*153}...(1/2)")
-      expect(result.last).to eq("(2/2)#{'a'*147}")
+      expect(result.first).to eq("#{'a' * 153}...(1/2)")
+      expect(result.last).to eq("(2/2)#{'a' * 147}")
     end
 
     # following test fails because of a bug in split implementation
