@@ -2,6 +2,7 @@ RuMeMe
 ======
 
 [![Build Status](https://travis-ci.org/rumeme/rumeme.png?branch=master)](https://travis-ci.org/rumeme/rumeme)
+[![Coverage Status](https://coveralls.io/repos/rumeme/rumeme/badge.png)](https://coveralls.io/r/rumeme/rumeme)
 [![Code Climate](https://codeclimate.com/github/rumeme/rumeme.png)](https://codeclimate.com/github/rumeme/rumeme)
 
 Ruby SDK for Message Media SMS Gateway API.
