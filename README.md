@@ -36,16 +36,16 @@ end
 ```
 
 Where xxx and yyy is your username and password consequently.
-Then you can use SmsInterface class to add and send messages.
+Then you can use `SmsInterface` class to add and send messages.
 
 ```ruby
 si = SmsInterface.new
 
-si.add_message :phone_number => 'xxxxxxxxxxx', :message => 'Message text 1'
-si.add_message :phone_number => 'xxxxxxxxxxx', :message => 'Message text 2'
-si.add_message :phone_number => 'xxxxxxxxxxx', :message => 'Message text 3'
-si.add_message :phone_number => 'xxxxxxxxxxx', :message => 'Message text 4'
-si.add_message :phone_number => 'xxxxxxxxxxx', :message => 'Message text 5'
+si.add_message(phone_number: 'xxxxxxxxxxx', message: 'Message text 1')
+si.add_message(phone_number: 'xxxxxxxxxxx', message: 'Message text 2')
+si.add_message(phone_number: 'xxxxxxxxxxx', message: 'Message text 3')
+si.add_message(phone_number: 'xxxxxxxxxxx', message: 'Message text 4')
+si.add_message(phone_number: 'xxxxxxxxxxx', message: 'Message text 5')
 
 si.send_messages
 ```
